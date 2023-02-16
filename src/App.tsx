@@ -18,6 +18,22 @@ function App({ title }: AppProps) {
         },
     ]);
 
+    const getCurrentTimestamp = () => {
+        const date = new Date().getTime();
+        return date;
+    };
+
+    const newAddTask = (task: Task) =>
+        setTasks([
+            ...tasks,
+            { ...task, id: getCurrentTimestamp(), completed: false },
+        ]);
+
+    const deleteTask = (id: number) => {
+        const filteredTasks = tasks.filter((task) => task.id !== id);
+        setTasks(filteredTasks);
+    };
+
     return (
         <div className="" style={{ height: "100vh" }}>
             <nav className="navbar navbar-dark bg-primary">
@@ -41,12 +57,12 @@ function App({ title }: AppProps) {
             <main className="container p-4">
                 <div className="row">
                     <div className="col-md-4">
-                      <TaskForm />
-                      </div>
+                        <TaskForm addNewTask={newAddTask} />
+                    </div>
 
                     <div className="col-md-8">
                         <div className="row">
-                            <TaskList tasks={tasks} />
+                            <TaskList tasks={tasks} deleteTask={deleteTask} />
                         </div>
                     </div>
                 </div>

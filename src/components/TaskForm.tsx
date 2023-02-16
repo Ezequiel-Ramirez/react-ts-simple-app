@@ -1,11 +1,37 @@
-import React from "react";
+import React, { useState, ChangeEvent, FormEvent } from "react";
 import { MdFactCheck } from "react-icons/md";
+import { Task } from "../interfaces/Tasks";
 
-const TaskForm = () => {
+type InputChange = ChangeEvent<HTMLInputElement | HTMLTextAreaElement>;
+interface Props {
+    addNewTask: (task: Task) => void;
+}
+
+const initialState = {
+    title: "",
+    description: "",
+};
+
+const TaskForm = ({ addNewTask }: Props) => {
+    const [task, setTask] = useState(initialState);
+
+    const handleInputChange = (e: InputChange) => {
+        setTask({
+            ...task,
+            [e.target.name]: e.target.value,
+        });
+    };
+
+    const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        addNewTask(task);
+        setTask(initialState);
+    };
+
     return (
         <div className="card card-body bg-secondary text-dark">
             <h1 className="text-center">New Task</h1>
-            <form>
+            <form onSubmit={handleSubmit}>
                 <div className="form-group">
                     <input
                         type="text"
@@ -13,17 +39,30 @@ const TaskForm = () => {
                         placeholder="Write a task"
                         className="form-control"
                         autoFocus
+                        onChange={(e) => {
+                            handleInputChange(e);
+                        }}
+                        value={task.title}
                     />
                 </div>
-                <div className="form-group" style={{marginTop: '10px'}}>
+                <div className="form-group" style={{ marginTop: "10px" }}>
                     <textarea
                         name="description"
                         rows={2}
                         className="form-control"
                         placeholder="Write a description"
+                        onChange={(e) => {
+                            handleInputChange(e);
+                        }}
+                        value={task.description}
                     ></textarea>
                 </div>
-                <button className="btn btn-primary btn-block" style={{marginTop: '10px'}}>Save <MdFactCheck/></button>
+                <button
+                    className="btn btn-primary btn-block"
+                    style={{ marginTop: "10px" }}
+                >
+                    Save <MdFactCheck />
+                </button>
             </form>
         </div>
     );
