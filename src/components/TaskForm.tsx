@@ -1,4 +1,4 @@
-import React, { useState, ChangeEvent, FormEvent } from "react";
+import React, { useState, ChangeEvent, FormEvent, useRef } from "react";
 import { MdFactCheck } from "react-icons/md";
 import { Task } from "../interfaces/Tasks";
 
@@ -14,6 +14,7 @@ const initialState = {
 
 const TaskForm = ({ addNewTask }: Props) => {
     const [task, setTask] = useState(initialState);
+    const inputTitle = useRef<HTMLInputElement>(null);
 
     const handleInputChange = (e: InputChange) => {
         setTask({
@@ -26,6 +27,7 @@ const TaskForm = ({ addNewTask }: Props) => {
         e.preventDefault();
         addNewTask(task);
         setTask(initialState);
+        inputTitle.current?.focus();
     };
 
     return (
@@ -39,6 +41,7 @@ const TaskForm = ({ addNewTask }: Props) => {
                         placeholder="Write a task"
                         className="form-control"
                         autoFocus
+                        ref={inputTitle}
                         onChange={(e) => {
                             handleInputChange(e);
                         }}
